@@ -40,9 +40,9 @@ public class Generator {
 			// api 文件保存路径 
 			String apiOutputDir= PathKit.getWebRootPath()
 										+ "/src/main/java/live/autu/demo/api";
-			DataSource dataSource=Config.getDataSource();
+		 
 			// 创建生成器
-			GeneratorApplication application = new GeneratorApplication(dataSource);
+			GeneratorApplication application = new GeneratorApplication();
 			// 设置数据库方言
 			application.setDialect(new MysqlDialect());
 			
@@ -78,7 +78,7 @@ public class Generator {
 					.setOutputDir(apiOutputDir)
 					);
 
-			application.setMetaBuilder(new MetaBuilder(dataSource));
+			application.setMetaBuilder(new MetaBuilder());
 			application.generate();
 	}
 }
