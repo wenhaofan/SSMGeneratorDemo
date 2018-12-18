@@ -1,7 +1,5 @@
 package live.autu.demo;
 
-import javax.sql.DataSource;
-
 import com.jfinal.kit.PathKit;
 import com.jfinal.plugin.activerecord.dialect.MysqlDialect;
 
@@ -13,34 +11,36 @@ import live.autu.generator.generator.ssm.DaoGenerator;
 import live.autu.generator.generator.ssm.MapperGenerator;
 import live.autu.generator.generator.ssm.ModelGenerator;
 import live.autu.generator.generator.ssm.ServiceGenerator;
+import live.autu.generator.generator.ssm.ViewGenerator;
 
 public class Generator {
 	public static void main(String[] args) {
 		   
 			// model 所使用的包名 
-			String modelPackageName = "live.autu.demo.model";
+			String modelPackageName = "com.bjlemon.edu.admin.management.index.model";
 			// dao 所使用的包名 
-			String daoPackageName = "live.autu.demo.dao";
+			String daoPackageName = "com.bjlemon.edu.admin.management.index.dao";
 			// service 所使用的包名 
-			String servicePackageName = "live.autu.demo.service";
+			String servicePackageName = "com.bjlemon.edu.admin.management.index.service";
 			// api 所使用的包名 
-			String apiPackageName = "live.autu.demo.api";
+			String apiPackageName = "com.bjlemon.edu.admin.management.index.api";
 			// model 文件保存路径 
 			String modelOutputDir = PathKit.getWebRootPath()
-					+ "/src/main/java/live/autu/demo/model";
+					+ "/src/main/java/com/bjlemon/edu/admin/management/index/model";
 			// dao 文件保存路径 
 			String daoOutputDir = PathKit.getWebRootPath()
-					+ "/src/main/java/live/autu/demo/dao";
+					+ "/src/main/java/com/bjlemon/edu/admin/management/index/dao";
 			// mapper 文件保存路径 
 			String mapperOutputDir= PathKit.getWebRootPath()
-					+ "/src/main/java/live/autu/demo/mapper";
+					+ "/src/main/java/com/bjlemon/edu/admin/management/index/mapper";
 			// service 文件保存路径 
 			String serviceOutputDir= PathKit.getWebRootPath()
-							+ "/src/main/java/live/autu/demo/service";
+							+ "/src/main/java/com/bjlemon/edu/admin/management/index/service";
 			// api 文件保存路径 
 			String apiOutputDir= PathKit.getWebRootPath()
-										+ "/src/main/java/live/autu/demo/api";
-		 
+										+ "/src/main/java/com/bjlemon/edu/admin/management/index/api";
+			String viewOutputDir= PathKit.getWebRootPath()
+					+ "/src/main/resources/view/";
 			// 创建生成器
 			GeneratorApplication application = new GeneratorApplication();
 			// 设置数据库方言
@@ -76,9 +76,15 @@ public class Generator {
 					.setServicePackageName(servicePackageName)
 					.setModelPackageName(modelPackageName)
 					.setOutputDir(apiOutputDir)
-					);
+					)
+			.addGenerator(new ViewGenerator()
+					.setUrlPrefix("/admin/api/management/index")
+					.setOutputDir(viewOutputDir)
+					 );
 
-			application.setMetaBuilder(new MetaBuilder());
+			application.setMetaBuilder(
+					new MetaBuilder(Config.getDataSource())
+					);
 			application.generate();
 	}
 }
